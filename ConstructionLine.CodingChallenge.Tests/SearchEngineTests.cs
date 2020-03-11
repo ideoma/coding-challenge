@@ -74,6 +74,8 @@ namespace ConstructionLine.CodingChallenge.Tests
         private const int Colors = 5;
         
         [TestCase(2, "Red", "Medium", 2)]
+        [TestCase(2, "Red", "Medium,Large", 2*1*2)]
+        [TestCase(2, "Red,Yellow", "Medium,Large", 2*2*2)]
         [TestCase(2, "Red,White", "", 2*2*Sizes)]
         [TestCase(1, "", "Medium,Small,Large", 1*Colors*3)]
         [TestCase(1, "", "Large", 1*Colors*1)]
@@ -81,7 +83,7 @@ namespace ConstructionLine.CodingChallenge.Tests
         [TestCase(10, "", "", 10*Colors*Sizes)]
         [TestCase(1000, "Black,Blue,Yellow", "", 1000*3*Sizes)]
         [TestCase(0, "Black,Blue,Yellow", "", 0*3*Sizes)]
-        public void ShouldCalculateShirtsCorrectly(int shirtsInEachCategory, string colors, string sizes, int expectedShirts)
+        public void ShouldCalculateShirtsCorrectlyUniformFill(int shirtsInEachCategory, string colors, string sizes, int expectedShirts)
         {
             var shirts = GenerateShirtsUniform(shirtsInEachCategory);
             var engine = new SearchEngine(shirts);
