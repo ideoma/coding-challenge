@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
+using System.Reflection;
 using ConstructionLine.CodingChallenge.Tests.SampleData;
 using NUnit.Framework;
 
@@ -41,8 +43,35 @@ namespace ConstructionLine.CodingChallenge.Tests
             Console.WriteLine($"Test fixture finished in {sw.ElapsedMilliseconds} milliseconds");
 
             AssertResults(results.Shirts, options);
-            AssertSizeCounts(_shirts, options, results.SizeCounts);
-            AssertColorCounts(_shirts, options, results.ColorCounts);
+            AssertSizeCounts(results.Shirts, options, results.SizeCounts);
+            AssertColorCounts(results.Shirts, options, results.ColorCounts);
+        }
+        
+        
+        [TestCase("Red", "Small")]
+        [TestCase("Red,Blue", "Large,Small,Medium")]
+        [TestCase("Yellow,Black,White", "Small,Medium")]
+        [TestCase("", "Small,Medium")]
+        [TestCase("White", "")]
+        public void PerformanceTestCase(string colors, string sizes)
+        {
+            var sw = new Stopwatch();
+            sw.Start();
+
+            var options = new SearchOptions
+            {
+                Colors = ToColorList(colors),
+                Sizes = ToSizesList(sizes)
+            };
+
+            var results = _searchEngine.Search(options);
+
+            sw.Stop();
+            Console.WriteLine($"Test fixture finished in {sw.ElapsedMilliseconds} milliseconds");
+
+            AssertResults(results.Shirts, options);
+            AssertSizeCounts(results.Shirts, options, results.SizeCounts);
+            AssertColorCounts(results.Shirts, options, results.ColorCounts);
         }
     }
 }

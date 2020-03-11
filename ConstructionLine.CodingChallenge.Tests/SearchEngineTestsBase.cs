@@ -64,5 +64,21 @@ namespace ConstructionLine.CodingChallenge.Tests
                     $"Color count for '{colorCount.Color.Name}' showing '{colorCount.Count}' should be '{expectedColorCount}'");
             }
         }
+        
+        protected static List<Color> ToColorList(string colors)
+        {
+            return colors.Split(",")
+                .Where(c => !string.IsNullOrWhiteSpace(c))
+                .Select(c => Color.All.Single(r => r.Name == c))
+                .ToList();
+        }
+
+        protected static List<Size> ToSizesList(string sizes)
+        {
+            return sizes.Split(",")
+                .Where(c => !string.IsNullOrWhiteSpace(c))
+                .Select(s => Size.All.Single(r => r.Name == s))
+                .ToList();
+        }
     }
 }
