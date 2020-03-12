@@ -33,6 +33,34 @@ namespace ConstructionLine.CodingChallenge.Tests
             AssertColorCounts(results.Shirts, searchOptions, results.ColorCounts);
         }
         
+        [TestCase("Red", "Small", ExpectedResult = "Red - Small")]
+        [TestCase("Black", "Medium", ExpectedResult = "Black - Medium")]
+        [TestCase("Blue", "Large", ExpectedResult = "Blue - Large")]
+        [TestCase("Blue", "Small", ExpectedResult = "")]
+        [TestCase("Yellow", "Large", ExpectedResult = "")]
+        [TestCase("Red,Black", "Small,Medium", ExpectedResult = "Red - Small,Black - Medium")]
+        public string TestShirtInEachCategory(string colors, string sizes)
+        {
+            var shirt1 = new Shirt(Guid.NewGuid(), "Red - Small", Size.Small, Color.Red);
+            var shirt2 = new Shirt(Guid.NewGuid(), "Black - Medium", Size.Medium, Color.Black);
+            var shirt3 = new Shirt(Guid.NewGuid(), "Blue - Large", Size.Large, Color.Blue);
+            var shirts = new List<Shirt>
+            {
+                shirt1, shirt2, shirt3
+            };
+
+            var searchEngine = new SearchEngine(shirts);
+            var searchOptions = new SearchOptions
+            {
+                Colors = ToColorList(colors),
+                Sizes = ToSizesList(sizes)
+            };
+
+            var results = searchEngine.Search(searchOptions);
+
+            return String.Join(",", results.Shirts.Select(s => s.Name));
+        }
+        
         [Test]
         public void ShouldThrowArgumentExceptionWhenInitializedWithNull()
         {
